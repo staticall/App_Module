@@ -1,6 +1,6 @@
 ## App_Module_Abstract
 
-[App_Module_Abstract] is a simple wrapper for [Zend Framework](https://github.com/zendframework/)'s DB class.
+[App_Module_Abstract] is a very simple wrapper for [Zend Framework](https://github.com/zendframework/)'s DB class.
 It allows you to get records from database, create, update or even delete them. Also, it allows you to join related tables, filter results or apply sorting, all with simple extend
 
 ## Basics
@@ -27,6 +27,8 @@ As you can see, only thing you required to do - initialize table (or tables). Af
 Please note, that you can't override main methods of the class (like getRecords(), getRowset(), etc.), but you can call then from other functions. I think it's much easier to create new function in your class, than use debug_backtrace() to found who override function you need.
 
 ## Methods
+
+Methods description and parameters will be described later.
 
 * getRecords()
 * getRowset()
@@ -79,17 +81,13 @@ https://github.com/staticall/App_Module_Abstract/issues
 
 ## Versioning
 
-For transparency and insight into our release cycle, releases will be numbered with the follow format:
+Version will be in following format
 
-`<major>.<minor>.<patch>`
+`<major>.<minor>.<hotfix>`
 
-And constructed with the following guidelines:
-
-* Breaking backwards compatibility bumps the major
-* New additions without breaking backwards compatibility bumps the minor
-* Bug fixes and misc changes bump the patch
-
-For more information on semantic versioning, please visit http://semver.org/.
+`Major` is a big update (like structure changing, etc.);
+`Minor` is a small update, which, usually, fix few bugs, adds new functions or expand current;
+`Hotfix` is a tiny update, which fixes some critical error.
 
 ## Authors
 
