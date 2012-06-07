@@ -46,17 +46,12 @@ class App_Module_Abstract
 
     $where = $this->prefilterWhere($where);
 
-    if(!$this->getActor()->isAdmin() && empty($where))
-    {
-      $add_is_deleted = 1;
-    }
-
     $where[] = array(
       'condition' => $table_name .'.'. $key .' = ?',
       'value'     => $id_or_val,
     );
 
-    if($table->isColumnExists($table::COLUMN_IS_DELETED) && $add_is_deleted)
+    if($table->isColumnExists($table::COLUMN_IS_DELETED))
     {
       $where[] = array(
         'condition' => $table_name .'.'. $table::COLUMN_IS_DELETED .' = ?',
@@ -97,10 +92,17 @@ class App_Module_Abstract
 
     foreach($rowset as $row)
     {
-      $id = $row->get_id();
       $data = $row->getData();
 
-      $records[$id] = $data;
+      if($row->isColumnExists('id'))
+      {
+        $id = $row->get_id();
+        $records[$id] = $data;
+      }
+      else
+      {
+        $records[] = $data;
+      }
     }
 
     if(isset($rowset)) unset($rowset);
@@ -1478,34 +1480,6 @@ class App_Module_Abstract
   }
 
   /**
-   * Return current user row
-   *
-   * @return <Object>
-   */
-  final public function getActor()
-  {
-    return $this->_actor;
-  }
-
-  /**
-   * Set current actor
-   *
-   * @param <Object> $user_row - Current user row
-   * @return <App_Module_Abstract>
-   */
-  final public function setActor($user_row)
-  {
-    if (!isObjectAndInstance($user_row, 'Row_User_Abstract'))
-    {
-      throw new App_Module_Exception('User row must be instance of Row_User_Abstract', $this->getExceptionCode(59));
-    }
-
-    $this->_actor = $user_row;
-
-    return $this;
-  }
-
-  /**
    * Return current object
    *
    * @return <Array || Object>
@@ -1612,24 +1586,5 @@ class App_Module_Abstract
     }
 
     return $array;
-  }
-
-  /**
-   * Shorthand for $this->getActor()->module($module_name)
-   *
-   * @param <String> $module_name - Module name to use
-   * @return <Object>
-   * @throws App_Module_Exception
-   */
-  final public function module($module_name)
-  {
-    $module_name = (string)$module_name;
-
-    if(!$module_name)
-    {
-      throw new App_Module_Exception('Module name required');
-    }
-
-    return $this->getActor()->module($module_name);
   }
 }
