@@ -1,18 +1,26 @@
 <?php
+/**
+ * Class for work with SQL databases and performing common operations.
+ *
+ * @category   App
+ * @package    App_Module
+ * @copyright  Copyright 2012 staticall <staticall AT gmail DOT com>
+ * @license    http://www.apache.org/licenses/LICENSE-2.0  Apache License, Version 2.0
+ */
 class App_Module_Abstract
 {
   protected $_table = null;
 
   const _EXCEPTION_CODE = 10050;
   const DEFAULT_INSTANCE_ROW = 'Zend_Db_Table_Row_Abstract';
+  const DEFAULT_INSTANCE_ROWSET = 'Zend_Db_Table_Rowset';
   const DEFAULT_INSTANCE_TABLE = 'Zend_Db_Table';
   const DEFAULT_INSTANCE_SELECT = 'Zend_Db_Select';
-  const DEFAULT_INSTANCE_ROWSET = 'App_Db_Table_Rowset_Paginate';
   const DEFAULT_VAR_TABLE_NAME = 'table';
   const DEFAULT_KEY = 'id';
   const DEFAULT_DATE = 'yyyy-MM-dd';
   const DEFAULT_DATETIME = 'yyyy-MM-dd HH:mm:ss';
-  const PLACEHOLDER_TABLENAME = App_Const::DB_PLACEHOLDER_TABLENAME;
+  const PLACEHOLDER_TABLENAME = '#TABLENAME#';
 
   final public function getRecord($id_or_val, $key = self::DEFAULT_KEY, $where = array(), $is_full = false, $instanceof = self::DEFAULT_INSTANCE_ROW, $var_table_name = self::DEFAULT_VAR_TABLE_NAME)
   {
