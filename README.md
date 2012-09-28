@@ -1,6 +1,7 @@
-## App_Module_Abstract
+## App_Module
+1.14.1
 
-[App_Module_Abstract] is a very simple wrapper for [Zend Framework](https://github.com/zendframework/)'s DB class.
+[App_Module] is a very simple wrapper for [Zend Framework](https://github.com/zendframework/)'s DB class.
 It allows you to get records from database, create, update or even delete them. Also, it allows you to join related tables, filter results or apply sorting, all with simple extend
 
 ## Basics
@@ -9,7 +10,7 @@ I hope this will help you understand how it all works:
 
 ```php
 <?php
-class App_Module_Example extends App_Module_Abstract
+class App_Module_Example extends App_Module
 {
   protected $_table = null;
 
@@ -83,7 +84,7 @@ Methods description and parameters will be described later.
 
 ```php
 <?php
-class App_Module_Example extends App_Module_Abstract
+class App_Module_Example extends App_Module
 {
   protected $_table = null;
 
@@ -103,7 +104,7 @@ class App_Module_Example extends App_Module_Abstract
 
 ```php
 <?php
-class App_Module_Example extends App_Module_Abstract
+class App_Module_Example extends App_Module
 {
   protected $_table = null;
 
@@ -119,7 +120,7 @@ class App_Module_Example extends App_Module_Abstract
     return $this->getRecords(null, null, null, array(), array(), true, $var_table_name);
   }
 
-  // joinRelatedTables will be called automatically through App_Module_Abstract::getRecords() method
+  // joinRelatedTables will be called automatically through App_Module::getRecords() method
   public function joinRelatedTables($select, $select_fields = true, $var_table_name = self::DEFAULT_VAR_TABLE_NAME)
   {
     // prefilter table and select, in case we get incorrect instances of empty objects
@@ -164,7 +165,7 @@ class App_Module_Example extends App_Module_Abstract
 
 Have a bug? Please, create an issue on GitHub!
 
-https://github.com/staticall/App_Module_Abstract/issues
+https://github.com/staticall/App_Module/issues
 
 ## Versioning
 
