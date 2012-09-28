@@ -533,7 +533,11 @@ class App_Module
      */
     if(method_exists($this, 'hookPostCreate'))
     {
-      $row = $this->hookPostCreate($row, $data, $var_table_name);
+      $row_post = $this->hookPostCreate($row, $data, $var_table_name);
+
+      // In case someone forget to return $row object in hookPostCreate method
+      if($row_post) $row = $row_post;
+      if(isset($row_post)) unset($row_post);
     }
 
     return $row;
@@ -2960,11 +2964,29 @@ class App_Module
   * Check is passed variable $object not empty, is object and instance of $instanceof
   *
   * @param <Object> $object Object to check
-  * @param <String> $instancename Instance of which object $object should be
-  * @return <Boolean>
+  * @param <Mixed> $instancename Instance of which object $object should be. Can be object (class name will be used), string or array
+  * @return <Mixed> If $instancename is array, will be returned instance class name or false, else true or false will be returned
   */
   public function isObjectAndInstance($object, $instancename)
   {
+    if(is_object($instancename)) $instancename = get_class($instancename);
+    if(is_resource($instancename)) throw new App_Module_Exception_WrongData('Instance name can\'t be a resource');
+
+    if(is_array($instancename))
+    {
+      if(empty($instancename)) throw new App_Module_Exception_WrongData('Instance name passed as empty array');
+      
+      foreach($instancename as $instance)
+      {
+        if($object && is_object($object) && ($object instanceof $instance))
+        {
+          return $instance;
+        }
+      }
+
+      return false;
+    }
+
     $instancename = (string)$instancename;
     if(!$instancename) return false;
 
@@ -2976,8 +2998,13 @@ class App_Module
     return false;
   }
 
+  /**
+   * Is debug enabled or not
+   *
+   * @return <Boolean>
+   */
   public function isDebug()
   {
-    return $this->_is_debug;
+    return ($this->_is_debug ? true : false);
   }
 }

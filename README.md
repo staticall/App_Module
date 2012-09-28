@@ -1,7 +1,7 @@
 ## App_Module
 1.14.1
 
-[App_Module] is a very simple wrapper for [Zend Framework](https://github.com/zendframework/)'s DB class.
+**App_Module** is a very simple wrapper for [Zend Framework](https://github.com/zendframework/)'s DB class.
 It allows you to get records from database, create, update or even delete them. Also, it allows you to join related tables, filter results or apply sorting, all with simple extend
 
 ## Basics
@@ -29,53 +29,39 @@ class App_Module_Example extends App_Module
 As you can see, only thing you required to do - initialize table (or tables). After that, you can just call any desired function.
 Please note, that you can't override main methods of the class (like getRecords(), getRowset(), etc.), but you can call then from other functions. I think it's much easier to create new function in your class, than use debug_backtrace() to found who override function you need.
 
-## Methods
+## Hooks
 
-Methods description and parameters will be described later.
+In this version, Hooks added to create method. This allows you to simply override them, instead of creating new functions
 
 ```php
-* getRecords()
-* getRowset()
-* getTotalRecordsWithPagination()
-* getTotalRecords()
-* getPagination()
-* createRow($data, $var_table_name = self::DEFAULT_VAR_TABLE_NAME) - create row filled with $data in $var_table_name
-* updateRecord($id, $data, $var_table_name = self::DEFAULT_VAR_TABLE_NAME) - update record with id = $id with $data in $var_table_name
-* updateRow($row, $data) - update row $row with $data
-* getRecord()
-* getRow()
-* getDefaultRow
-* deleteRecord()
-* deleteRow($row) - delete row $row from database
-* doesRecordExists($row_or_val, $exclude_row_or_val = null, $key = self::DEFAULT_KEY, $var_table_name = self::DEFAULT_VAR_TABLE_NAME) - checks if record ($row_or_val with key $key) or row ($row_or_val) exists in $var_table_name, excluding $exclude_row_or_val
-* prefilterVarTableName($var_table_name = self::DEFAULT_VAR_TABLE_NAME) - prefilter $var_table_name, check if parameter got '_' in beginning, etc.
-* getTable($var_table_name = self::DEFAULT_VAR_TABLE_NAME) - return table instance, stored in $var_table_name
-* getTableName($var_table_name = self::DEFAULT_VAR_TABLE_NAME) - get table name from table, stored in $var_table_name
-* prepareSelect($where = array(), $var_table_name = self::DEFAULT_VAR_TABLE_NAME) - create new Zend_Db_Select object from table, stored in $var_table_name and applies to object condition $where
-* applyWhere($select, $where = array(), $var_table_name = self::DEFAULT_VAR_TABLE_NAME) - applies condition $where for table, stored in $var_table_name to instance of Zend_Db_Select $select
-* prepareFilter()
-* applyFilterRules()
-* - filterId()
-* - filterMultiple()
-* - filterBoolean()
-* - filterRange()
-* - filterBetween()
-* - filterDate()
-* - filterString()
-* - filterStringLike()
-* - filterUrl()
-* applyOrderAndLimit()
-* joinRelatedTables()
-* prefilterId()
-* prefilterWhere()
-* prefilterArray()
-* prefilterRow()
-* prefilterSelect()
-* _replacePlaceholders()
-* getConfig()
-* getExceptionCode()
-* prepareDate()
-* loadData()
+<?php
+class App_Module_Example extends App_Module
+{
+  protected $_table = null;
+
+  const STATUS_TEST    = 'test';
+  const STATUS_EXAMPLE = 'example';
+
+  public function __construct()
+  {
+    $this->_table = new Table_Example();
+  }
+
+  public function hookPreCreate($data, $var_table_name = self::DEFAULT_VAR_TABLE_NAME)
+  {
+    if(isset($data['id'])) unset($data['id']);
+    if(!$data['status']) $data['status'] = self::STATUS_TEST;
+
+    return $data;
+  }
+
+  public function hookPostCreate($row, $data, $var_table_name = self::DEFAULT_VAR_TABLE_NAME)
+  {
+    if(!$row) throw new App_Module_Example_Exception('Row not created, please, recheck data array passed and table');
+
+    return $row;
+  }
+}
 ```
 
 ## Examples
